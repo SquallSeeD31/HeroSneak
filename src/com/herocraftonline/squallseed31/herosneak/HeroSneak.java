@@ -186,8 +186,12 @@ public class HeroSneak extends JavaPlugin
 	  if (p.isOp() && (permission.equalsIgnoreCase("herosneak.sneak") || opsAutoSneak))
 		  return true;
 	  //If using Nijikokun's Permissions, do a Permissions check
-	  if (permissionSystem.equalsIgnoreCase("permissions") && Permissions.has(p, permission))
-		  return true;
+	  if (permissionSystem.equalsIgnoreCase("permissions") && Permissions.has(p, permission)) {
+		  if (permission.equalsIgnoreCase("herosneak.auto") && Permissions.has(p, "*") && !opsAutoSneak)
+			  return false;
+		  else
+			  return true;
+	  }
 	  //If using config.yml definitions, iterate over the list (for case insensitivity)
 	  if (permissionSystem.equalsIgnoreCase("config")) {
 		  if (permission.equalsIgnoreCase("herosneak.auto")) {
