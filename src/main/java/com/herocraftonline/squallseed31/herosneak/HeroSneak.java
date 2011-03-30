@@ -167,10 +167,12 @@ public class HeroSneak extends JavaPlugin
 		Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
 		if(Permissions == null) {
 		    if(test != null) {
-			Permissions = ((Permissions)test).getHandler();
-		    } else {
-			log.info("[" + this.name + "]" + " Permission system not enabled. Defaulting to ops only.");
-			permissionSystem = "Ops";
+		    	if (!test.isEnabled())
+		    		this.getServer().getPluginManager().enablePlugin(test);
+				Permissions = ((Permissions)test).getHandler();
+			} else {
+				log.info("[" + this.name + "]" + " Permission system not enabled. Defaulting to ops only.");
+				permissionSystem = "Ops";
 		    }
 		}
   }

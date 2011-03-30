@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.herocraftonline.squallseed31.herosneak</groupId>
   <artifactId>HeroSneak</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <name>HeroSneak</name>
   <build>
   	<plugins>
