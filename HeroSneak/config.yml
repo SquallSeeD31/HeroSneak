@@ -1,0 +1,10 @@
+messages:
+    sneakOn: '&7You are now sneaking.'
+    sneakOff: '&7You are no longer sneaking.'
+permissions:
+    sneak: []
+    autosneak: []
+options:
+    refreshInterval: 5
+    permissions: permissions
+    opsAutoSneak: false
