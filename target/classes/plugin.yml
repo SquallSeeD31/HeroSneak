@@ -1,6 +1,7 @@
 name: HeroSneak
 main: com.herocraftonline.squallseed31.herosneak.HeroSneak
-version: 1.0.5.33
+version: 1.0.6.34
+author: SquallSeeD31
 commands:
   sneak:
     description: Toggle sneaking on or off.
