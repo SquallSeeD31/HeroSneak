@@ -1,6 +1,6 @@
 name: HeroSneak
 main: com.herocraftonline.squallseed31.herosneak.HeroSneak
-version: 1.0.6.34
+version: 1.1.0.36
 author: SquallSeeD31
 commands:
   sneak:

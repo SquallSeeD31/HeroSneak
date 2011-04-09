@@ -1,6 +1,7 @@
 package com.herocraftonline.squallseed31.herosneak;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
@@ -24,6 +25,7 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 public class HeroSneak extends JavaPlugin
 {
 	protected ArrayList<Player> sneakingPlayers = new ArrayList<Player>();
+	private HashMap<Player,Long> cooldownTimes = new HashMap<Player,Long>();
 	private static Timer refreshTimer = null;
 	
 	//Plugin variables
@@ -40,8 +42,12 @@ public class HeroSneak extends JavaPlugin
 
 	private String sneakOnMessage;
 	private String sneakOffMessage;
+	private String sneakCooldownMessage;
+	
 	private String permissionSystem;
 	private int refreshInterval;
+	private int sneakDuration;
+	private int sneakCooldown;
 	private boolean opsAutoSneak;
 	private List<String> canAutosneak;
 	private List<String> canSneak;
@@ -71,9 +77,12 @@ public class HeroSneak extends JavaPlugin
     //Start config
     sneakOnMessage = this.config.getString("messages.sneakOn", "&7You are now sneaking.").replace("&", "\u00A7");
     sneakOffMessage = this.config.getString("messages.sneakOff", "&7You are no longer sneaking.").replace("&", "\u00A7");
+    sneakCooldownMessage = this.config.getString("messages.sneakCooldown", "&4You must wait <time> seconds before you may sneak again.").replace("&", "\u00A7");
     permissionSystem = this.config.getString("options.permissions", "permissions");
     opsAutoSneak = this.config.getBoolean("options.opsAutoSneak", false);
-    refreshInterval = this.config.getInt("options.refreshInterval", 5);
+    refreshInterval = this.config.getInt("options.timers.refresh", this.config.getInt("options.refreshInterval", 5));
+    sneakDuration = this.config.getInt("options.timers.duration", 0);
+    sneakCooldown = this.config.getInt("options.timers.cooldown", 0);
     if (permissionSystem.equalsIgnoreCase("config")) {
     	canAutosneak = config.getStringList("permissions.autosneak", null);
     	canSneak = config.getStringList("permissions.sneak", null);
@@ -133,6 +142,16 @@ public class HeroSneak extends JavaPlugin
   
   private void setSneak(Player player, boolean sneak){
       if (sneak) {
+    	  if (sneakCooldown > 0 && cooldownTimes.containsKey(player) && cooldownTimes.get(player)>System.currentTimeMillis()) {
+    		  player.sendMessage(sneakCooldownMessage.replaceAll("<time>", Integer.toString((int)Math.ceil((cooldownTimes.get(player)-System.currentTimeMillis())/1000))));
+    		  return;
+    	  }
+    	  if (!hasPermission(player, "herosneak.exempt")) {
+	    	  if (sneakCooldown > 0)
+	    		  cooldownTimes.put(player, System.currentTimeMillis()+sneakCooldown*1000L);
+	    	  if (sneakDuration > 0)
+	    		  getServer().getScheduler().scheduleSyncDelayedTask(this, new SneakCooldown(player), sneakDuration*20L);
+    	  }
           player.setSneaking(true);
     	  player.sendMessage(sneakOnMessage);
           if(!sneakingPlayers.contains(player))
@@ -221,9 +240,12 @@ public class HeroSneak extends JavaPlugin
   public void saveConfig() {
 	  this.config.setProperty("messages.sneakOn", sneakOnMessage.replace("\u00A7", "&"));
 	  this.config.setProperty("messages.sneakOff", sneakOffMessage.replace("\u00A7", "&"));
+	  this.config.setProperty("messages.sneakCooldown", sneakCooldownMessage.replace("\u00A7", "&"));
 	  this.config.setProperty("options.permissions", permissionSystem);
 	  this.config.setProperty("options.opsAutoSneak", opsAutoSneak);
-	  this.config.setProperty("options.refreshInterval", refreshInterval);
+	  this.config.setProperty("options.timers.refresh", refreshInterval);
+	  this.config.setProperty("options.timers.duration", sneakDuration);
+	  this.config.setProperty("options.timers.cooldown", sneakCooldown);
 	  this.config.setProperty("permissions.sneak", canSneak);
 	  this.config.setProperty("permissions.autosneak", canAutosneak);
 	  this.config.save();
@@ -240,4 +262,18 @@ public class HeroSneak extends JavaPlugin
     String strDisable = "[" + name + "] " + version + " disabled.";
 	    log.info(strDisable);
   }
+  
+  public class SneakCooldown implements Runnable {
+		private Player player;
+		
+		public SneakCooldown(Player player) {
+			this.player = player;
+		}
+		
+		public void run() {
+			if (player.isSneaking())
+				setSneak(player, false);
+		}
+
+	}
   }

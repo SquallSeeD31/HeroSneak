@@ -1,10 +1,15 @@
-messages:
-    sneakOn: '&7You are now sneaking.'
-    sneakOff: '&7You are no longer sneaking.'
 permissions:
-    sneak: []
-    autosneak: []
+    autosneak: null
+    sneak: null
+messages:
+    sneakOff: '&7You are no longer sneaking.'
+    sneakCooldown: '&4You must wait <time> seconds before you may sneak again.'
+    sneakOn: '&7You are now sneaking.'
 options:
+    timers:
+        duration: 0
+        cooldown: 0
+        refresh: 5
     refreshInterval: 5
     permissions: permissions
     opsAutoSneak: false
