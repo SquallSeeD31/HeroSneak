@@ -26,7 +26,7 @@ public class HeroSneak extends JavaPlugin
 {
 	protected ArrayList<Player> sneakingPlayers = new ArrayList<Player>();
 	private HashMap<Player,Long> cooldownTimes = new HashMap<Player,Long>();
-	private static Timer refreshTimer = null;
+	//private static Timer refreshTimer = null;
 	
 	//Plugin variables
 	private final HeroSneakListener listener = new HeroSneakListener(this);
@@ -67,7 +67,6 @@ public class HeroSneak extends JavaPlugin
 	    pm.registerEvent(Type.PLAYER_QUIT, this.listener, Priority.Monitor, this);
 	    try {
 	        pm.registerEvent(Type.PLAYER_TOGGLE_SNEAK, this.listener, Priority.Highest, this);
-	        pm.registerEvent(Type.PLAYER_RESPAWN, this.listener, Priority.Highest, this);
 	    } catch (NoSuchFieldError e) {
 	    	log.severe("[" + name + "] PLAYER_TOGGLE_SNEAK unsupported in this version of CraftBukkit! Disabling plugin.");
 	    	if (debugging) e.printStackTrace();
@@ -165,7 +164,20 @@ public class HeroSneak extends JavaPlugin
   }
   
   private void setupRefresh() {
-	    if (refreshInterval != 0) {
+	  if (refreshInterval != 0) {
+		  long refreshTicks = refreshInterval*20L;
+		  this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+		        public void run() {
+		        	if (!sneakingPlayers.isEmpty()) {
+		        		for (Player p : sneakingPlayers) {
+		        			p.setSneaking(false);
+		        			p.setSneaking(true);
+		        		}
+		        	}
+		        }
+		      }, refreshTicks, refreshTicks);
+	  }
+	    	/*
 	      refreshTimer = new Timer();
 	      refreshTimer.scheduleAtFixedRate(new TimerTask() {
 	        public void run() {
@@ -178,7 +190,7 @@ public class HeroSneak extends JavaPlugin
 	        }
 	      }
 	      , 500L, refreshInterval * 1000L);
-	    }
+	      */
 	  }
   
   //This method is the default API hook for Permissions

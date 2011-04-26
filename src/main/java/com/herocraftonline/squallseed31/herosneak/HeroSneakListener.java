@@ -25,13 +25,6 @@ public class HeroSneakListener extends PlayerListener {
         	plugin.sneakingPlayers.remove(event.getPlayer());
 	}
 
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		if (!plugin.sneakingPlayers.isEmpty() && plugin.sneakingPlayers.contains(event.getPlayer())) {
-	        if(plugin.sneakingPlayers.contains(event.getPlayer()))
-	        	plugin.sneakingPlayers.remove(event.getPlayer());
-		}
-	}
-
 	public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         if(!plugin.sneakingPlayers.isEmpty() && plugin.sneakingPlayers.contains(event.getPlayer())) {
         	event.getPlayer().setSneaking(true);
