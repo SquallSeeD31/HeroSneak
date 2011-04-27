@@ -253,7 +253,7 @@ public class HeroSneak extends JavaPlugin
 	  this.config.setProperty("messages.sneakOn", sneakOnMessage.replace("\u00A7", "&"));
 	  this.config.setProperty("messages.sneakOff", sneakOffMessage.replace("\u00A7", "&"));
 	  this.config.setProperty("messages.sneakCooldown", sneakCooldownMessage.replace("\u00A7", "&"));
-	  this.config.setProperty("options.permissions", permissionSystem);
+	  this.config.setProperty("options.permissions", this.config.getString("options.permissions", permissionSystem));
 	  this.config.setProperty("options.opsAutoSneak", opsAutoSneak);
 	  this.config.setProperty("options.timers.refresh", refreshInterval);
 	  this.config.removeProperty("options.refreshInterval");
