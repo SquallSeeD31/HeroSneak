@@ -2,8 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.herocraftonline.squallseed31.herosneak</groupId>
   <artifactId>HeroSneak</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.4</version>
   <name>HeroSneak</name>
+  <description>Bukkit plugin to automatically hide your name in Minecraft without holding the shift key</description>
+  <url>http://www.thedarktide.net/</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.packageName>com.herocraftonline.squallseed31.herosneak</project.packageName>
+    </properties>
   <build>
   	<plugins>
   		<plugin>

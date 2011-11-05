@@ -1,6 +1,8 @@
-name: HeroSneak
-main: com.herocraftonline.squallseed31.herosneak.HeroSneak
-version: 1.2.1.40
+name: ${name}
+main: ${project.packageName}.${name}
+version: ${version}
+website: ${url}
+description: ${description}
 author: SquallSeeD31
 commands:
   sneak:

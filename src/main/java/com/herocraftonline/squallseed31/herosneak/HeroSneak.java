@@ -65,6 +65,8 @@ public class HeroSneak extends JavaPlugin
 	    PluginManager pm = getServer().getPluginManager();
 	    pm.registerEvent(Type.PLAYER_JOIN, this.listener, Priority.Monitor, this);
 	    pm.registerEvent(Type.PLAYER_QUIT, this.listener, Priority.Monitor, this);
+	    pm.registerEvent(Type.PLAYER_RESPAWN, this.listener, Priority.Monitor, this);
+	    pm.registerEvent(Type.PLAYER_TELEPORT, this.listener, Priority.Monitor, this);
 	    try {
 	        pm.registerEvent(Type.PLAYER_TOGGLE_SNEAK, this.listener, Priority.Highest, this);
 	    } catch (NoSuchFieldError e) {
@@ -170,6 +172,7 @@ public class HeroSneak extends JavaPlugin
 		        public void run() {
 		        	if (!sneakingPlayers.isEmpty()) {
 		        		for (Player p : sneakingPlayers) {
+		        			HeroSneak.debug("Re-snuck: " + p.getName() + ", are they sneaking? " + p.isSneaking());
 		        			p.setSneaking(false);
 		        			p.setSneaking(true);
 		        		}
@@ -215,11 +218,11 @@ public class HeroSneak extends JavaPlugin
 	  if (permissionSystem.equalsIgnoreCase("none") && (permission.equalsIgnoreCase("herosneak.sneak") || opsAutoSneak))
 		  return true;
 	  //Ops always win
-	  if (p.isOp() && (permission.equalsIgnoreCase("herosneak.sneak") || opsAutoSneak))
+	  if (p.isOp() && (!permission.equalsIgnoreCase("herosneak.auto") || opsAutoSneak))
 		  return true;
 	  //If using Nijikokun's Permissions, do a Permissions check
 	  if (permissionSystem.equalsIgnoreCase("permissions") && Permissions.has(p, permission)) {
-		  if (permission.equalsIgnoreCase("herosneak.auto") && Permissions.has(p, "*") && !opsAutoSneak)
+		  if ((permission.equalsIgnoreCase("herosneak.auto") || permission.equalsIgnoreCase("herosneak.off")) && Permissions.has(p, "*") && !opsAutoSneak)
 			  return false;
 		  else
 			  return true;
